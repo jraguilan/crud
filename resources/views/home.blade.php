@@ -155,7 +155,7 @@
              <th>Date Purchase</th>
             <th>Date Updated</th>
             <th>Remarks</th>
-            <th>Action</th>
+            <th>Action</th> 
           </tr>
         </thead>
           <tbody>
