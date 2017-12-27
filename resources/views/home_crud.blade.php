@@ -91,7 +91,7 @@
             Delete
         </button>
  <!--DELETE MODAL-->
-         <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <!--    <div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                 
@@ -113,7 +113,7 @@
                 </div>
             </div>
         </div>
-
+ -->
 
         <!--<button class="btn btn-default" data-href="delete/{{ $user1->id }}" data-toggle="modal" data-target="myModal2">-->
 
@@ -237,6 +237,7 @@
                 <form class="form-horizontal" action="purchase" method="get">
                 <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>"> 
             <fieldset>
+              <form>
               <!-- Form Name 
               <legend>Purchase</legend>
                Select Basic -->
@@ -275,8 +276,9 @@
          <button type="submit" id="button1id" name="button1id" class="btn btn-success">CREATE</button>
         </div>
 
-           </fieldset>
+          
         </form>
+         </fieldset>
         </div>           
      
         </div>

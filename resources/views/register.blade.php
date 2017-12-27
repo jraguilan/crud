@@ -5,7 +5,7 @@
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
             <div class="panel panel-default">
-                <div class="panel-heading">Register User</div>
+                <div class="panel-heading">Register</div>
 
                 <div class="panel-body">
                     <form class="form-horizontal" method="POST" action="{{ route('register') }}">
@@ -77,17 +77,19 @@
 
                         <div class="form-group">
                             <div class="col-md-6 col-md-offset-4">
-                                <button type="submit" class="btn btn-primary">
-                                    Register User
+                                <button type="submit" class="btn btn-primary"><span class="glyphicon glyphicon-ok"> 
+                                    Register
                                 </button>
+                                 <a class="btn btn-default" href="/home">
+                                    Back
+                                </a>
                             </div>
-                            
+                            <div class="col-md-6 col-md-offset-4">
+                               
+                            </div>
                         </div>
                     </form>
                 </div>
-                <div class="panel-footer text-right">
-                    <a href="/home" class="btn btn-default">Back</a>
-                 </div> 
             </div>
         </div>
     </div>

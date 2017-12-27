@@ -17,10 +17,14 @@
     <!-- CSRF Token -->
       <meta name="csrf-token" content="{{ csrf_token() }}">
 
-   <title>Home | Ayannah Ojt</title>
+   <title>Purchasing | Ayannah Ojt</title>
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap4.min.css">
+
+
 </head>
 
 
@@ -40,7 +44,7 @@
 
                     <!-- Branding Image -->
                     <a class="navbar-brand">
-                    CRUD
+                    PURCHASING
                     </a>
                 </div>
 
@@ -58,17 +62,29 @@
                             <li><a href="{{ route('register') }}">Register</a></li>
                         @else
                             <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="glyphicon glyphicon-user"></span>
                                     {{ Auth::user()->name }} <span class="caret"></span>
                                 </a>
 
                                 <ul class="dropdown-menu" role="menu">
                                     <li>
+
+                                      @if (Auth::user()->status == 1)
+                                        <a href="register">
+                                            Register User
+                                        </a>
                                         <a href="{{ route('logout') }}"
                                             onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
                                             Logout
                                         </a>
+                                      @else
+                                        <a href="{{ route('logout') }}"
+                                            onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+                                            Logout
+                                        </a>
+                                      @endif
 
                                         <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                             {{ csrf_field() }}
@@ -84,7 +100,7 @@
 
         @yield('content')
     </div>
-
+<!-- 
 <div class="container">
     <div class="row">
         <div class="col-md-12">
@@ -106,10 +122,7 @@
         </div>
     </div>
 </div>
-
-
-
-
+ -->
   <div class="container">
        <div class="row">
         <div class="col-md-12 ">
@@ -125,26 +138,27 @@
 
             <div class="form-group">
                 <label for="datetimepicker1"> Date from:</label>
-                    <input type='date' id='datetimepicker1' name="datetimepicker1" class="form-control"  />
+                    <input type='date' id='datetimepicker1' name="datetimepicker1" class="form-control" required="" />
                
             </div>
              <div class="form-group">
                 <label for="datetimepicker2"> Date to:</label>
-                    <input type='date' id='datetimepicker2' name="datetimepicker2" class="form-control"  />
+                    <input type='date' id='datetimepicker2' name="datetimepicker2" class="form-control" required="" />
                
             </div>
-          <button class="btn btn-primary" type="submit">Search</button>     
-            </form>  
-
+          <button class="btn btn-primary" type="submit" style="padding-left: 67px; padding-right: 67px;"><span class="glyphicon glyphicon-search"></span>  Search</button> 
+           </form>
+              
              </div>
-               
-                   <div class="col-sm-3">
-      <a id="button3id" name="button3id" class="btn btn-success" href="add-purchase" data-toggle="modal" data-target="#addModal" style="padding-left: 30px; padding-right: 30px;">Create New Transaction</a>
-                  </div>
-          </div>
-    <div>
-       @if(isset($users2))
-          <table class="table table-striped">
+             <div class="col-sm-3 text-right">  
+          <a id="button3id" name="button3id" class="btn btn-success" href="add-purchase" data-toggle="modal" data-target="#addModal"><span class="glyphicon glyphicon-plus"></span> Create New Transaction</a>     
+           </div><br>
+               <div class="col-sm-12"><br></div>
+                   <div class="col-sm-12">
+      
+                           <div>
+     
+          <table id="example" class="table table-striped">
         <thead>
           <tr>
             <th>ID</th>
@@ -172,14 +186,25 @@
             
             <td>
               
-
-
-        <a class="btn btn-primary" href="edit/{{ $user1->id }}" style="padding-left: 25px; padding-right: 25px;">Edit</a>
-        <button class="btn btn-danger" data-href="delete/{{ $user1->id }}" data-toggle="modal" data-target="#confirm-delete">
+<!-- echo "<td><a onClick=\"javascript: return confirm('Please confirm deletion');\" href='delete.php?id=".$query2['id']."'>x</a></td><tr>"; //use double quotes for js inside php!
+ -->
+        <a class="btn btn-primary" href="edit/{{ $user1->id }}"" style="padding-left: 20px; padding-right: 20px"><span class="glyphicon glyphicon-pencil"></span> Edit</a>
+        <a class="btn btn-danger" href="delete/{{ $user1->id }}" onclick="return confirm('Do you really want to delete this record?\nID number: {{ $user1->id }}')"><span class="glyphicon glyphicon-remove"></span>
+        <!--   <script>
+function myFunction() {
+    confirm("Do you really want to delete this record?");
+}
+</script> -->
+        <!--    data-target="#confirm-delete" data-toggle="modal -->
             Delete
-        </button>
+        </a>
+
+        </td>
+              </tr>
+  @endforeach
+
  <!--DELETE MODAL-->
-         <div class="modal fade" id="confirm-delete" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <!--  <div class="modal fade" id="confirm-delete" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                 
@@ -190,46 +215,83 @@
                 
                     <div class="modal-body">
                         <p>You are about to delete this record, this procedure is irreversible.</p>
-                        <p>Do you want to proceed?</p>
-                        <p class="debug-url"></p>
-                    </div>
-                    
+                        <p>Do you want to proceed? {{ $user1->id }}</p>
+                        <!-- <p class="debug-url"></p> -->
+                   <!--  </div>
+                       
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                        <a class="btn btn-danger btn-ok">Delete</a>
+                        <a class="btn btn-danger" href="delete">Delete</a>
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --> 
+
+<!-- 
+   @if(session('user_id'))
+    <script>
+    $(function() {
+        $('.btn-danger').click(function (){
+            var url = ($(this).attr('id'));
+            $($(this).data('target')).show();
+        })
+    });
+    </script>
+@endif
+ -->
 
 
-        </td>
-              </tr>
-  
-  @endforeach
-
-      
+<!--       
 <script>
             $('#confirm-delete').on('show.bs.modal', function(e) {
                 $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
                 
                 $('.debug-url').html('Delete URL: <strong>' + $(this).find('.btn-ok').attr('href') + '</strong>');
             });
-        </script>
+        </script> -->
 
             </tbody>
           </table>
 
-<?php 
-
-  echo $users2->links(); 
-  ?>
-@endif
         </div>
+
+                  </div>
+          </div>
+   
  
 </div>
 </div>
 
+<!--CREATE NEW USER-->
+<!-- <div class="modal fade" id="addusermodal" role="dialog">
+    <div class="modal-dialog">
+    
+       Modal content
+      <div class="modal-content">
+        <div class="modal-header btn-success">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">CREATE USER</h4>
+        </div>
+        <div class="modal-body">
+ 
+        <p></p>
+
+                
+              <div class="modal-footer ">
+         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+         <button type="submit" id="button1id" name="button1id" class="btn btn-success">CREATE</button>
+        </div>
+             
+        </div>           
+        </div>
+      </div>
+
+        
+      </div> -->
+           
+
+    </div>
+  </div>
 <!--CREATE NEW MODAL-->
 <div class="modal fade" id="addModal" role="dialog">
     <div class="modal-dialog">
@@ -238,11 +300,11 @@
       <div class="modal-content">
         <div class="modal-header btn-success">
           <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">CREATE PURCHASE</h4>
+          <h4 class="modal-title">PURCHASE</h4>
         </div>
         <div class="modal-body">
  
-        <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+        <p></p>
             <div class="row">
               <div class="col-sm-12">
                 <form class="form-horizontal" action="purchase" method="get">
@@ -282,7 +344,7 @@
               </div> 
               <div class="modal-footer ">
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-         <button type="submit" id="button1id" name="button1id" class="btn btn-success">CREATE</button>
+         <button type="submit" id="button1id" name="button1id" class="btn btn-success">Create</button>
         </div>
              </fieldset>
           </form>
@@ -298,6 +360,12 @@
   </div>
 
   </div>
+
+
+ 
+</div>
+
+
  </div>
     
 </div>
@@ -313,6 +381,15 @@ $('#datetimepicker1').datetimepicker({
   }).on('dp.change', function(e) {
               unix =  e.date.unix();
  });
+    </script>
+
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js"></script>
+    <script type="text/javascript">
+      $(document).ready(function() {
+    $('#example').DataTable();
+} );
     </script>
    <!--  <script type="text/javascript">
       document.getElementById('datetimepicker1').valueAsDate = new Date()

@@ -21,6 +21,8 @@ class HomeController extends Controller
         $this->middleware('auth');
     }
 
+
+        private $user_id;
     /**
      * Show the application dashboard.
      *
@@ -28,10 +30,14 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $users2 = DB::table('transaction')->paginate(5);
+        $users2 = DB::table('transaction')->get();
         return view('home',['users2'=>$users2]);
     }
-
+ public function createuser()
+    {
+       
+        return view('auth.register');
+    }
 
 
     public function insert(Request $request){
@@ -56,6 +62,7 @@ class HomeController extends Controller
 }   
 public function show($id)
 {
+   // dd($id);
         $users2 = DB::select('select * from transaction where id = ?',[$id]);
         return view('update_purchase',['users2'=>$users2]);
 
@@ -76,35 +83,51 @@ public function show($id)
         //echo "    .<br/>";
         //echo '<a href="/home">Click Here</a> to go back.';
 }
-    public function destroy($id)
-{
-        DB::delete('delete from transaction where id = ?',[$id]);
+
+    public function destroy(Request $request, $id)
+{  
+     //   select
+          //  dd($this->user_id);
+        DB::delete('delete from transaction where id = ?',[$id]);    
         return redirect('home');
+        //  $request->session()->flush();
         //echo "Record deleted successfully.<br/>";
         //echo '<a href="/home">Click Here</a> to go back.';
 }
-public function select($id)
-{
-        DB::select('select from transaction where id = ?',[$id]);
-        return redirect('home');
-        //echo "Record deleted successfully.<br/>";
-        //echo '<a href="/home">Click Here</a> to go back.';
-}
+// public function select(Request $request,$id)
+// { //dd($id);
+//         //DB::select('select from transaction where id = ?',[$id]);
+//         $this->user_id=$id;
+//         dd($this->user_id);
+//         $request->session()->put('user_id',$this->user_id);
+//          //return redirectback();
+//         //return $this->user_id;
+//         //dd($this->user_id);
+//          //return redirect('home');
+//         //echo "Record deleted successfully.<br/>";
+//         //echo '<a href="/home">Click Here</a> to go back.';
+// }
 
 public function searchdate(Request $request)
 {
 
+
        $datefrom = $request->input('datetimepicker1');
          $dateto = $request->input('datetimepicker2');
+         $datefrom = $datefrom.  " 00:00:00";
+          $dateto = $dateto.  " 23:59:59";
+
+          // dd($datefrom);
          $request->session('datefrom',$datefrom);
            $request->session('dateto',$dateto);
 
         $users2 = DB::table('transaction')->whereBetween('created_at', [$datefrom,$dateto])
-       ->paginate(5)->setPath ( '' );
+       ->get();
        //  $users2 = DB::select('select * from transaction where created_at between ? and ?',[$datefrom,$dateto]);
-          // dd($users2);
+           
       // $users2->appends(['search' => $datefrom]);
         return view('home',['users2'=>$users2]);
+
          // $users2->withPath('custom/url');
 
 
