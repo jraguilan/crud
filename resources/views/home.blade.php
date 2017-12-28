@@ -13,7 +13,6 @@
     <script data-require="bootstrap@*" data-semver="3.1.1" src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
     <link data-require="bootstrap-css@3.1.1" data-semver="3.1.1" rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" />
     <link rel="stylesheet" href="style.css" />
-   
     <!-- CSRF Token -->
       <meta name="csrf-token" content="{{ csrf_token() }}">
 
@@ -23,7 +22,6 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap4.min.css">
-
 
 </head>
 
@@ -134,21 +132,20 @@
           <div class="row">
              <div class="col-sm-9">
              
-             <form class="form-inline" action="search" method="get">
-
+             <form class="form-inline">
             <div class="form-group">
-                <label for="datetimepicker1"> Date from:</label>
-                    <input type='date' id='datetimepicker1' name="datetimepicker1" class="form-control" required="" />
-               
+                <label for="datetimepicker1"> Date puchase from:</label>
+                    <input type='date' id='datetimepicker1' name="datetimepicker1" class="form-control date_range_filter date" required="" /> 
             </div>
              <div class="form-group">
-                <label for="datetimepicker2"> Date to:</label>
-                    <input type='date' id='datetimepicker2' name="datetimepicker2" class="form-control" required="" />
-               
+                <label for="datetimepicker2"> Date puchase to:</label>
+                    <input type='date' id='datetimepicker2' name="datetimepicker2" class="form-control date_range_filter date" required="" />
             </div>
-          <button class="btn btn-primary" type="submit" style="padding-left: 67px; padding-right: 67px;"><span class="glyphicon glyphicon-search"></span>  Search</button> 
+              <div class="form-group">
+                <a class="btn btn-primary" id='searchbtn' name="searchbtn"><span class="glyphicon glyphicon-search"></span>  Search</a> 
+              </div>
            </form>
-              
+               
              </div>
              <div class="col-sm-3 text-right">  
           <a id="button3id" name="button3id" class="btn btn-success" href="add-purchase" data-toggle="modal" data-target="#addModal"><span class="glyphicon glyphicon-plus"></span> Create New Transaction</a>     
@@ -186,8 +183,7 @@
             
             <td>
               
-<!-- echo "<td><a onClick=\"javascript: return confirm('Please confirm deletion');\" href='delete.php?id=".$query2['id']."'>x</a></td><tr>"; //use double quotes for js inside php!
- -->
+
         <a class="btn btn-primary" href="edit/{{ $user1->id }}"" style="padding-left: 20px; padding-right: 20px"><span class="glyphicon glyphicon-pencil"></span> Edit</a>
         <a class="btn btn-danger" href="delete/{{ $user1->id }}" onclick="return confirm('Do you really want to delete this record?\nID number: {{ $user1->id }}')"><span class="glyphicon glyphicon-remove"></span>
         <!--   <script>
@@ -261,38 +257,9 @@ function myFunction() {
  
 </div>
 </div>
-
-<!--CREATE NEW USER-->
-<!-- <div class="modal fade" id="addusermodal" role="dialog">
-    <div class="modal-dialog">
-    
-       Modal content
-      <div class="modal-content">
-        <div class="modal-header btn-success">
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">CREATE USER</h4>
-        </div>
-        <div class="modal-body">
- 
-        <p></p>
-
-                
-              <div class="modal-footer ">
-         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-         <button type="submit" id="button1id" name="button1id" class="btn btn-success">CREATE</button>
-        </div>
-             
-        </div>           
-        </div>
-      </div>
-
-        
-      </div> -->
-           
-
-    </div>
+   </div>
   </div>
-<!--CREATE NEW MODAL-->
+<!--CREATE NEW PURCHASE MODAL-->
 <div class="modal fade" id="addModal" role="dialog">
     <div class="modal-dialog">
     
@@ -371,8 +338,9 @@ function myFunction() {
 </div>
 
 
+
     <script src="{{ asset('js/app.js') }}"></script>
-    <script type="text/javascript">
+   <!--  <script type="text/javascript">
     
         var unix = 0;
 $('#datetimepicker1').datetimepicker({
@@ -381,20 +349,58 @@ $('#datetimepicker1').datetimepicker({
   }).on('dp.change', function(e) {
               unix =  e.date.unix();
  });
-    </script>
-
+    </script> -->
+ 
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js"></script>
-    <script type="text/javascript">
-      $(document).ready(function() {
-    $('#example').DataTable();
-} );
-    </script>
-   <!--  <script type="text/javascript">
-      document.getElementById('datetimepicker1').valueAsDate = new Date()
-        document.getElementById('datetimepicker2').valueAsDate = new Date()
-    </script> -->
+
+<script type="text/javascript">
+  $.fn.dataTableExt.afnFiltering.push(
+    function( oSettings, aData, iDataIndex ) {
+        var iFini = document.getElementById('datetimepicker1').value;
+        var iFfin = document.getElementById('datetimepicker2').value;
+        var iStartDateCol = 5;
+        var iEndDateCol = 5;
+ 
+        iFini=iFini.substring(6,10) + iFini.substring(3,5)+ iFini.substring(0,2);
+        iFfin=iFfin.substring(6,10) + iFfin.substring(3,5)+ iFfin.substring(0,2);
+ 
+        var datofini=aData[iStartDateCol].substring(6,10) + aData[iStartDateCol].substring(3,5)+ aData[iStartDateCol].substring(0,2);
+        var datoffin=aData[iEndDateCol].substring(6,10) + aData[iEndDateCol].substring(3,5)+ aData[iEndDateCol].substring(0,2);
+ 
+        if ( iFini === "" && iFfin === "" )
+        {
+            return true;
+        }
+        else if ( iFini <= datofini && iFfin === "")
+        {
+            return true;
+        }
+        else if ( iFfin >= datoffin && iFini === "")
+        {
+            return true;
+        }
+        else if (iFini <= datofini && iFfin >= datoffin)
+        {
+            return true;
+        }
+        return false;
+    }
+);
+  
+</script>
+<script type="text/javascript">
+  $(document).ready(function() {
+      var table = $('#example').DataTable();
+ 
+      // Add event listeners to the two range filtering inputs
+      // $('#datetimepicker1').onchange( function() { table.draw(); } );
+      // $('#datetimepicker2').onchange( function() { table.draw(); } );
+      $('#searchbtn').click( function() { table.draw(); } );
+  } );
+</script>
+ 
 </body>
 </html>
 

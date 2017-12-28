@@ -31,6 +31,6 @@ Route::get('purchase','HomeController@insert');
 Route::get('edit/{id}','HomeController@show');
 Route::post('edit/{id}','HomeController@edit');
 Route::get('delete/{id}','HomeController@destroy');
-Route::get('search','HomeController@searchdate');
+// Route::get('search','HomeController@searchdate');
 Route::get('select/{id}','HomeController@select');
 Route::get('auth/register', 'HomeController@createuser');

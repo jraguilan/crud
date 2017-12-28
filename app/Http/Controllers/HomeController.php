@@ -108,29 +108,29 @@ public function show($id)
 //         //echo '<a href="/home">Click Here</a> to go back.';
 // }
 
-public function searchdate(Request $request)
-{
+// public function searchdate(Request $request)
+// {
 
 
-       $datefrom = $request->input('datetimepicker1');
-         $dateto = $request->input('datetimepicker2');
-         $datefrom = $datefrom.  " 00:00:00";
-          $dateto = $dateto.  " 23:59:59";
+//        $datefrom = $request->input('datetimepicker1');
+//          $dateto = $request->input('datetimepicker2');
+//          $datefrom = $datefrom.  " 00:00:00";
+//           $dateto = $dateto.  " 23:59:59";
 
-          // dd($datefrom);
-         $request->session('datefrom',$datefrom);
-           $request->session('dateto',$dateto);
+//           // dd($datefrom);
+//          $request->session('datefrom',$datefrom);
+//            $request->session('dateto',$dateto);
 
-        $users2 = DB::table('transaction')->whereBetween('created_at', [$datefrom,$dateto])
-       ->get();
-       //  $users2 = DB::select('select * from transaction where created_at between ? and ?',[$datefrom,$dateto]);
+//         $users2 = DB::table('transaction')->whereBetween('created_at', [$datefrom,$dateto])
+//        ->get();
+//        //  $users2 = DB::select('select * from transaction where created_at between ? and ?',[$datefrom,$dateto]);
            
-      // $users2->appends(['search' => $datefrom]);
-        return view('home',['users2'=>$users2]);
+//       // $users2->appends(['search' => $datefrom]);
+//         return view('home',['users2'=>$users2]);
 
-         // $users2->withPath('custom/url');
+//          // $users2->withPath('custom/url');
 
 
-}
+// }
 
 }
