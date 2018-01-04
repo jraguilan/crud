@@ -20,5 +20,5 @@ COPY . /home/renzel
 RUN composer install
 
 #run app using port 80
-CMD php artisan serve --host=0.0.0.0 --port=80
-EXPOSE 80
+CMD php artisan serve --host=0.0.0.0 --port=88
+EXPOSE 88
