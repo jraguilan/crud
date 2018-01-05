@@ -20,8 +20,8 @@ RUN yum install -y \
 
 
 # get symfony and composer (I know, curl pipes, so insecure... go read the script if you're scared of the gov't installing keyloggers)
-RUN curl -LsS https://symfony.com/installer -o /usr/local/bin/symfony
-RUN chmod a+x /usr/local/bin/symfony
+#RUN curl -LsS https://symfony.com/installer -o /usr/local/bin/symfony
+#RUN chmod a+x /usr/local/bin/symfony
 RUN curl -sS https://getcomposer.org/installer | php
 RUN mv composer.phar /usr/local/bin/composer
 
