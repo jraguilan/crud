@@ -1,3 +1,30 @@
+FROM php:7.0-fpm
+
+#install dependencies
+RUN apt-get update -y && apt-get install -y openssl zip unzip git postgresql postgresql-contrib
+RUN echo "deb http://ftp.de.debian.org/debian stretch main" >> /etc/apt/sources.list
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y php71u-pgsql
+RUN apt-get install -y libpcre3-dev
+
+# Install Postgre PDO
+RUN apt-get install -y libpq-dev \
+    && docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
+    && docker-php-ext-install pdo pdo_pgsql pgsql mbstring
+
+#install composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+RUN cd /home && \
+    mkdir renzel
+WORKDIR /home/renzel/
+COPY . /home/renzel
+RUN composer install
+
+#run app using port 80
+CMD php artisan serve --host=0.0.0.0 --port=8080
+EXPOSE 8080
+
+#
+
 FROM centos:7
 #MAINTAINER Jake Zieve <jjzieve@gmail.com>
 
@@ -18,15 +45,13 @@ RUN yum install -y \
 	postgresql \
 	postgresal-contrib ; exit 0
 
-
 # get symfony and composer (I know, curl pipes, so insecure... go read the script if you're scared of the gov't installing keyloggers)
 RUN curl -LsS https://symfony.com/installer -o /usr/local/bin/symfony
 RUN chmod a+x /usr/local/bin/symfony
 RUN curl -sS https://getcomposer.org/installer | php
 RUN mv composer.phar /usr/local/bin/composer
 
-
-# install symfony demo  
+# install symfony demo 
 WORKDIR /var/www/
 RUN symfony demo
 WORKDIR /var/www/symfony_demo
