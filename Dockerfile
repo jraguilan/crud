@@ -17,7 +17,7 @@ RUN yum install -y \
 	php70w-process \
 	postgresql \
 	postgresal-contrib ; exit 0
-
+	
 # get symfony and composer (I know, curl pipes, so insecure... go read the script if you're scared of the gov't installing keyloggers)
 RUN curl -LsS https://symfony.com/installer -o /usr/local/bin/symfony
 RUN chmod a+x /usr/local/bin/symfony
