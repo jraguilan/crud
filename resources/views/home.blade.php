@@ -170,6 +170,7 @@
           </tr>
         </thead>
           <tbody>
+            @if (count($users2) > 0)
           @foreach ($users2 as $user1)
           <tr>
             <td>{{ $user1->id }}</td>
@@ -198,6 +199,8 @@ function myFunction() {
         </td>
               </tr>
   @endforeach
+  @else
+  @endif
 
  <!--DELETE MODAL-->
         <!--  <div class="modal fade" id="confirm-delete" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -211,8 +214,8 @@ function myFunction() {
                 
                     <div class="modal-body">
                         <p>You are about to delete this record, this procedure is irreversible.</p>
-                        <p>Do you want to proceed? {{ $user1->id }}</p>
-                        <!-- <p class="debug-url"></p> -->
+                        <p>Do you want to proceed? </p>
+                        <! <p class="debug-url"></p> -->
                    <!--  </div>
                        
                     <div class="modal-footer">
