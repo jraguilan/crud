@@ -1,38 +1,57 @@
-FROM centos:7
-#MAINTAINER Jake Zieve <jjzieve@gmail.com>
+FROM debian:jessie
 
-# pull the epel and webtatic repos
-RUN rpm -Uvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
-RUN rpm -Uvh https://mirror.webtatic.com/yum/el7/webtatic-release.rpm
+ENV DEBIAN_FRONTEND noninteractive
 
-# install php7 & postgresql-9.4
-RUN yum -y update && yum clean all
-RUN yum install -y \
-	php70w \
-	php70w-opcache \
-	php70w-xml \
-	php70w-mbstring \
-	php70w-pdo \
-	php70w-pgsql \
-	php70w-process \
-	postgresql \
-	postgresal-contrib ; exit 0
+WORKDIR /tmp
+# Install utils
+RUN \
+  apt-get update && \
+  apt-get -y install wget \
+                curl \
+                apt-utils \
+                ssmtp \
+                xz-utils \
+                libxrender-dev \
+                git && \
 
+# Configure git
+  git config --global url."https://".insteadOf git:// && \
 
-# get symfony and composer (I know, curl pipes, so insecure... go read the script if you're scared of the gov't installing keyloggers)
-#RUN curl -LsS https://symfony.com/installer -o /usr/local/bin/symfony
-#RUN chmod a+x /usr/local/bin/symfony
-RUN curl -sS https://getcomposer.org/installer | php
-RUN mv composer.phar /usr/local/bin/composer
+# Configure Dotdeb sources
+  wget -O - http://www.dotdeb.org/dotdeb.gpg | apt-key add - && \
+  echo "deb http://packages.dotdeb.org jessie all" > /etc/apt/sources.list.d/dotdeb.list && \
+  echo "\ndeb-src http://packages.dotdeb.org jessie all" >> /etc/apt/sources.list.d/dotdeb.list && \
+  apt-get update && \
+  apt-get install -y php7.0-fpm \
+                php7.0 \
+                php7.0-pgsql 
 
+FROM php:7.0-fpm
 
-# install symfony demo  
-WORKDIR /var/www/
-RUN symfony demo
-WORKDIR /var/www/symfony_demo
-RUN chmod +x app/console
+#install dependencies
+RUN apt-get update -y && apt-get install -y openssl zip unzip git postgresql postgresql-contrib
+RUN echo "deb http://ftp.de.debian.org/debian stretch main" >> /etc/apt/sources.list
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive
+#RUN apt-get install -y php7.0-pgsql
+#RUN apt-get install -y libpcre3-dev
 
-# expose port 8000 and run the demo via: $ app/console server:run 0.0.0.0:8000
-EXPOSE 8000
-ENTRYPOINT ["/usr/bin/php"]
-CMD ["app/console", "server:run", "0.0.0.0:8000"]
+# Install Postgre PDO
+#RUN apt-get install -y libpq-dev \
+ #  && docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
+ #  && docker-php-ext-install pdo pdo_pgsql pgsql mbstring
+
+FROM php:5.6-apache
+
+RUN apt-get update && apt-get install -y libpq-dev && docker-php-ext-install pdo pdo_pgsql 
+
+#install composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+RUN cd /home && \
+   mkdir renzel
+WORKDIR /home/renzel/
+COPY . /home/renzel
+#RUN composer install
+
+#run app using port 9999
+CMD php artisan serve --host=0.0.0.0 --port=9999
+EXPOSE 9999
