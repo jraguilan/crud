@@ -14,10 +14,11 @@
 Route::get('/', function () {
     return view('welcome');
 });
-Route::get('/user', function () {
+
+
+Route::get('/secret', function () {
     return view('CREATEONLY');
 });
-
 
 Auth::routes();
 
@@ -28,7 +29,6 @@ Route::get('home', 'HomeController@index')->name('home');
  //   return view('default');
 //});
 //Route::resource('itemCRUD','ItemCRUDController');
-
 
 //Route::get('homeCRUD','HomeController@index1');
 Route::get('purchase','HomeController@insert');
