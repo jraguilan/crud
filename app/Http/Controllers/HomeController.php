@@ -8,6 +8,7 @@ use App\Http\Requests;
 use App\Http\Controllers;
 use Carbon\Carbon;
 use DateTime;
+use Session;
 
 class HomeController extends Controller
 {
@@ -30,17 +31,24 @@ class HomeController extends Controller
      */
     public function index()
     {
+       //  console.log('pumas');
+        //  if (Auth::guest()) { 
+        //     return Redirect::guest('login');
+        // } else { 
         $users2 = DB::table('transaction')->get();
+        
         return view('home',['users2'=>$users2]);
+        
     }
  public function createuser()
     {
        
-        return view('auth.register');
+        return view('register');
     }
 
 
     public function insert(Request $request){
+
 ///$value = session('name');
         $actor = $request -> user()->username;
       
@@ -55,6 +63,7 @@ class HomeController extends Controller
 //GAWA BAGONG PAGE YUNG MAAYOS NA RETURN..
         //echo "Record inserted successfully.<br/>";
         //echo '<a href="/home">Click Here</a> to go back.';
+         Session::flash ( 'message', "Added successfully." );
         return redirect('home');
 }
     public function index1(){
@@ -78,7 +87,7 @@ public function show($id)
         $remarks = $request->input('remarks');
 
         DB::update('update transaction set purchase = ?, amount = ?, operator = ?, updated_at = ?, remarks = ?, actor = ? where id = ?',[$purchase2,$amount2,$operator2,$current_time,$remarks,$actor,$id]);
-
+          Session::flash ( 'message', "Updated successfully." );
         return redirect('home');
         //echo "    .<br/>";
         //echo '<a href="/home">Click Here</a> to go back.';
@@ -88,12 +97,15 @@ public function show($id)
 {  
      //   select
           //  dd($this->user_id);
-        DB::delete('delete from transaction where id = ?',[$id]);    
+        DB::delete('delete from transaction where id = ?',[$id]);
+             Session::flash ( 'message', "Deleted successfully." );
         return redirect('home');
         //  $request->session()->flush();
         //echo "Record deleted successfully.<br/>";
         //echo '<a href="/home">Click Here</a> to go back.';
 }
+
+ 
 // public function select(Request $request,$id)
 // { //dd($id);
 //         //DB::select('select from transaction where id = ?',[$id]);
@@ -132,5 +144,44 @@ public function show($id)
 
 
 // }
+
+
+private function super()
+    {
+       //  console.log('pumas');
+        //  if (Auth::guest()) { 
+        //     return Redirect::guest('login');
+        // } else { 
+        $users2 = DB::table('users')->get();
+        if (count($users2) > 1) {
+            return redirect(\URL::previous());
+        }
+        else {
+            $rules = array (
+                 'name' => 'required|string|max:255',
+                'email' => 'required|string|email|max:255|unique:users',
+                'username' => 'required|string|max:255|unique:users',
+                'password' => 'required|string|min:6|confirmed',
+        );
+        $validator = Validator::make ( Input::all (), $rules );
+        if ($validator->fails ()) {
+            return Redirect::back ()->withErrors ( $validator)->withInput ();
+        } else {
+            $user = new User ();
+            $user->name = $request->get ( 'name' );
+            $user->email = $request->get ( 'email' );
+            $user->username = $request->get ( 'username' );
+            $user->password = Hash::make ( $request->get ( 'password' ) );
+            $user->remember_token = $request->get ( '_token' );
+            
+            $user->save ();
+             
+         return redirect(\URL::previous());
+        }
+            //return view('CREATEONLY');
+        }
+        //return view('home',['users2'=>$users2]);
+        
+    }
 
 }

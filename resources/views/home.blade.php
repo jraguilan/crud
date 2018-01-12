@@ -27,8 +27,9 @@
 
 
 <body>
-    <div id="app">
-        <nav class="navbar navbar-default navbar-static-top">
+
+    <div id="app" name="top">
+        <nav class="navbar navbar-default navbar-fixed-top">
             <div class="container">
                 <div class="navbar-header">
 
@@ -56,8 +57,8 @@
                     <ul class="nav navbar-nav navbar-right">
                         <!-- Authentication Links -->
                         @if (Auth::guest())
-                            <li><a href="{{ route('login') }}">Login</a></li>
-                            <li><a href="{{ route('register') }}">Register</a></li>
+                            <li><a href="signin">Login</a></li>
+                          
                         @else
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="glyphicon glyphicon-user"></span>
@@ -71,20 +72,20 @@
                                         <a href="register">
                                             Register User
                                         </a>
-                                        <a href="{{ route('logout') }}"
+                                        <a href="logout"
                                             onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
                                             Logout
                                         </a>
                                       @else
-                                        <a href="{{ route('logout') }}"
-                                            onclick="event.preventDefault();
+                                        <a href="logout"
+                                             onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
                                             Logout
                                         </a>
                                       @endif
 
-                                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                        <form id="logout-form" action="{{route('logout')}}" method="POST" style="display: none;">
                                             {{ csrf_field() }}
                                         </form>
                                     </li>
@@ -95,6 +96,7 @@
                 </div>
             </div>
         </nav>
+        <br><br><br>
 
         @yield('content')
     </div>
@@ -120,11 +122,19 @@
         </div>
     </div>
 </div>
+
  -->
+                           @if (Session::has('message'))
+                                <div class="col-md-10 col-md-offset-1 alert alert-success alert-dismissable fade in">
+                                  <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                <strong>Success! </strong>{{ Session::get('message') }}</div>
+                            @endif
+
+                       
   <div class="container">
        <div class="row">
         <div class="col-md-12 ">
-            <div class="panel panel-default">
+            <div class="panel panel-primary">
                 <div class="panel-heading"><strong>LIST OF PURCHASES</strong></div>
 
                 <div class="panel-body">
@@ -170,8 +180,8 @@
           </tr>
         </thead>
           <tbody>
-            @if (count($users2) > 0)
-          @foreach ($users2 as $user1)
+        
+          @forelse ($users2 as $user1)
           <tr>
             <td>{{ $user1->id }}</td>
             <td>{{ $user1->purchase }}</td>
@@ -198,9 +208,9 @@ function myFunction() {
 
         </td>
               </tr>
-  @endforeach
-  @else
-  @endif
+              @empty
+@endforelse
+  
 
  <!--DELETE MODAL-->
         <!--  <div class="modal fade" id="confirm-delete" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -296,7 +306,7 @@ function myFunction() {
               <div class="form-group">
                 <label class="col-md-4 control-label" for="amount">Amount</label>
                 <div class="col-md-6">
-                    <input id="amount" name="amount" class="form-control" placeholder="" type="number" step="any" required="">
+                    <input id="amount" name="amount" class="form-control" placeholder="Enter Amount" type="number" step="any" required="">
                  <!--  <p class="help-block">Input amount in Philippine peso..</p>-->
                 </div>
               </div>
@@ -339,8 +349,43 @@ function myFunction() {
  </div>
     
 </div>
+<br><br><br>
 
+<nav class="navbar navbar-default navbar-fixed-bottom">
+            <div class="container">
+                <div class="navbar-header">
 
+                    <!-- Collapsed Hamburger -->
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#app-navbar-collapse">
+                        <span class="sr-only">Toggle Navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+
+                    <!-- Branding Image -->
+                    <a class="navbar-brand">
+                   PURCHASING
+                    </a>
+                </div>
+
+                <div class="collapse navbar-collapse" id="app-navbar-collapse">
+                    <!-- Left Side Of Navbar -->
+                    <ul class="nav navbar-nav">
+                        &nbsp;
+                    </ul>
+
+                    <!-- Right Side Of Navbar -->
+                    <ul class="nav navbar-nav navbar-right">
+                        <!-- Authentication Links -->
+                     
+                            <li><a href=""></a></li>
+                            <li><a href="#top">Back to top of page</a><li>
+                          
+                    </ul>
+                </div>
+            </div>
+        </nav>
 
     <script src="{{ asset('js/app.js') }}"></script>
    <!--  <script type="text/javascript">
@@ -378,11 +423,11 @@ $('#datetimepicker1').datetimepicker({
         }
         else if ( iFini <= datofini && iFfin === "")
         {
-            return true;
+            return false;
         }
         else if ( iFfin >= datoffin && iFini === "")
         {
-            return true;
+            return false;
         }
         else if (iFini <= datofini && iFfin >= datoffin)
         {
@@ -403,6 +448,7 @@ $('#datetimepicker1').datetimepicker({
       $('#searchbtn').click( function() { table.draw(); } );
   } );
 </script>
+ 
  
 </body>
 </html>

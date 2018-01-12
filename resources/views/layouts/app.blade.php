@@ -22,8 +22,8 @@
 
 
 <body>
-    <div id="app">
-        <nav class="navbar navbar-default navbar-static-top">
+    <div id="app" name="top">
+        <nav class="navbar navbar-default navbar-fixed-top">
             <div class="container">
                 <div class="navbar-header">
 
@@ -51,8 +51,10 @@
                     <ul class="nav navbar-nav navbar-right">
                         <!-- Authentication Links -->
                         @if (Auth::guest())
-                            <li><a href="{{ route('login') }}">Login</a></li>
-                          <!--   <li><a href="{{ route('register') }}">Register</a></li> -->
+
+                            <li><a href="{{route('login')}}">Login</a></li>
+                            <li><a href="/">Back</a></li>
+                          
                         @else
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><span class="glyphicon glyphicon-user"></span>
@@ -65,22 +67,22 @@
                                         <a href="register">
                                             Register User
                                         </a>
-                                        <a href="{{ route('logout') }}"
+                                        <a href="logout"
                                             onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
                                             Logout
                                         </a>
                                       @else
-                                        <a href="{{ route('logout') }}"
-                                            onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
+                                        <a href="logout"
+                                             onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();"> 
                                             Logout
                                         </a>
                                       @endif
 
-                                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                        <form id="logout-form" action="{{ route('logout')}}" method="POST" style="display: none;">
                                             {{ csrf_field() }}
-                                        </form>
+                                        </form> 
                                     </li>
                                 </ul>
                             </li>
@@ -89,12 +91,49 @@
                 </div>
             </div>
         </nav>
+        <br><br><br><br>
 
         @yield('content')
     </div>
 
     <!-- Scripts -->
 
+
+<nav class="navbar navbar-default navbar-fixed-bottom">
+            <div class="container">
+                <div class="navbar-header">
+
+                    <!-- Collapsed Hamburger -->
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#app-navbar-collapse">
+                        <span class="sr-only">Toggle Navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+
+                    <!-- Branding Image -->
+                    <a class="navbar-brand">
+                   PURCHASING
+                    </a>
+                </div>
+
+                <div class="collapse navbar-collapse" id="app-navbar-collapse">
+                    <!-- Left Side Of Navbar -->
+                    <ul class="nav navbar-nav">
+                        &nbsp;
+                    </ul>
+
+                    <!-- Right Side Of Navbar -->
+                    <ul class="nav navbar-nav navbar-right">
+                        <!-- Authentication Links -->
+                     
+                            <li><a href=""></a></li>
+                            <li><a href="#top">Back to top of page</a><li>
+                          
+                    </ul>
+                </div>
+            </div>
+        </nav>
 
     <script src="{{ asset('js/app.js') }}"></script>
 </body>
