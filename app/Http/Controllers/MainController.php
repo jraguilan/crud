@@ -29,7 +29,7 @@ public function login(Request $request) {
 		);
 		$validator = Validator::make ( Input::all (), $rules );
 		if ($validator->fails ()) {
-			Session::flash ( 'message', "Invalid Credentials , Please try again." );
+			Session::flash ( 'message', "Invalid Password. Minimum of 6 characters. Please try again." );
 			return Redirect::back ()->withErrors ( $validator)->withInput ();
 		} else {
 
