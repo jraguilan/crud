@@ -4,17 +4,21 @@
 <br><br>
 <div class="container">
     <div class="row">
-        <div class="col-md-8 col-md-offset-2">
+        <div class="col-md-6 col-md-offset-3">
             <div class="panel panel-primary">
                 <div class="panel-heading">Login</div>
 
                 <div class="panel-body">
+                    <h2 align="center" style="color: dodgerblue">Welcome to Purchasing</h2>
+                    <p align="center">Login with your <strong>Username</strong></p>
                                     
                             @if (Session::has('message'))
                             <div class="alert alert-danger">{{ Session::get('message') }}</div>
                             @endif
                     <form class="form-horizontal" action="home" method="POST">
                         {{ csrf_field() }}
+
+                        
 <br>
                         <div class="form-group{{ $errors->has('username') ? ' has-error' : '' }}">
                             <label for="username" class="col-md-4 control-label">Username</label>
@@ -47,8 +51,8 @@
                         </div>
  -->
                         <div class="form-group">
-                            <div class="col-md-8 col-md-offset-4">
-                                <button type="submit" class="btn btn-primary" style="padding-right: 35%; padding-left: 30%">
+                            <div class="col-md-6 col-md-offset-4">
+                                <button type="submit" class="btn btn-primary btn-block">
                                     Login
                                 </button>
                                 <br><br>

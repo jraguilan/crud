@@ -53,8 +53,11 @@ public function login(Request $request) {
 						'name' => $request->get ( 'name' ) 
 				] );
 				//return redirect('home');
+	
 				
-				$users2 = DB::table('transaction')->get();
+				 $users2 = DB::table('transaction')
+		        ->orderby('created_at','desc')
+		        ->get();
 				return view('home',['users2'=>$users2]);
 			} else {
 				Session::flash ( 'message', "Invalid Credentials , Please try again." );

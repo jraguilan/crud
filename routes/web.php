@@ -14,6 +14,10 @@
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('/table', function () {
+    return view('table');
+});
+
 
 Route::post ( 'superregister', 'HomeController@superregister' );
 
@@ -25,13 +29,6 @@ Auth::routes();
 Route::post ( '/registeruser', 'MainController@register' );
 Route::get('home', 'HomeController@index');
 
-
-//Route::get('/default', function () {
- //   return view('default');
-//});
-//Route::resource('itemCRUD','ItemCRUDController');
-
-//Route::get('homeCRUD','HomeController@index1');
 Route::get('purchase','HomeController@insert');
 Route::get('edit/{id}','HomeController@show');
 Route::post('edit/{id}','HomeController@edit');
@@ -41,4 +38,6 @@ Route::get('select/{id}','HomeController@select');
 Route::get('register', 'HomeController@createuser');
 Route::post ( 'home', 'MainController@login' );
 Route::get ( 'logout', 'MainController@logout' );
-	
+
+	Route::get('download', 'HomeController@exportascsv');
+//	Route::post('items/import', 'ExportController@import');

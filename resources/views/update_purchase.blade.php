@@ -42,12 +42,12 @@
                        <div class="form-group">
                                 <label class="col-md-4 control-label" for="remarks">Remarks</label>
                                 <div class="col-md-6">                     
-                                  <textarea rows="4" cols="50" autofocus class="form-control" id="remarks" placeholder="Remarks" name="remarks" value='<?php echo $users2[0]->remarks; ?>'></textarea>
+                                  <textarea type="textarea" rows="4" cols="50" autofocus class="form-control" id="remarks" placeholder="Remarks" name="remarks" value='<?php echo $users2[0]->remarks; ?>'><?php echo $users2[0]->remarks; ?></textarea>
                                 </div>
                         </div>  
                                         
                          <div class="col-md-6 col-md-offset-4">
-                                <button type="submit" onclick="return confirm('Do you really want to update this record?')" id="button1id" name="button1id" class="btn btn-primary" style="padding-left: 40%; padding-right: 42%"><span class="glyphicon glyphicon-ok"></span> Update</button>
+                                <button type="submit" onclick="return confirm('Do you really want to update this record?')" id="button1id" name="button1id" class="btn btn-primary btn-block"><span class="glyphicon glyphicon-ok"></span> Update</button>
                               
                         </div>
 

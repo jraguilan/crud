@@ -29,7 +29,7 @@
 <body>
 
     <div id="app" name="top">
-        <nav class="navbar navbar-default navbar-fixed-top">
+        <nav class="navbar navbar-default navbar-fixed-top" style="border-bottom:3px solid dodgerblue;padding-bottom:5px; border-top:2px; padding-top: 5px">
             <div class="container">
                 <div class="navbar-header">
 
@@ -96,7 +96,7 @@
                 </div>
             </div>
         </nav>
-        <br><br><br>
+        <br><br><br><br>
 
         @yield('content')
     </div>
@@ -129,42 +129,63 @@
                                   <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                                 <strong>Success! </strong>{{ Session::get('message') }}</div>
                             @endif
+                              @if (Session::has('error'))
+                                <div class="col-md-10 col-md-offset-1 alert alert-danger alert-dismissable fade in">
+                                  <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                <strong>ERROR! </strong>{{ Session::get('error') }}</div>
+                            @endif
 
                        
   <div class="container">
        <div class="row">
+
         <div class="col-md-12 ">
             <div class="panel panel-primary">
-                <div class="panel-heading"><strong>LIST OF PURCHASES</strong></div>
+                <div class="panel-heading"><strong>LIST OF PURCHASES</strong>
+                  
+                </div>
 
                 <div class="panel-body">
                    
           <div class="row">
-             <div class="col-sm-9">
+             <div class="col-sm-12">
              
-             <form class="form-inline">
+             <form class="form-inline" action="download" method="get">
+
             <div class="form-group">
-                <label for="datetimepicker1"> Date puchase from:</label>
-                    <input type='date' id='datetimepicker1' name="datetimepicker1" class="form-control date_range_filter date" required="" /> 
+                <label for="datetimepicker1">Date puchase from:</label>
+                    <input type='date' id='datetimepicker1' name="datetimepicker1" class="form-control date_range_filter date "/>
             </div>
              <div class="form-group">
-                <label for="datetimepicker2"> Date puchase to:</label>
-                    <input type='date' id='datetimepicker2' name="datetimepicker2" class="form-control date_range_filter date" required="" />
+                <label for="datetimepicker2">Date puchase to:</label>
+                    <input type='date' id='datetimepicker2' name="datetimepicker2" class="form-control date_range_filter date"/>
             </div>
               <div class="form-group">
-                <a class="btn btn-primary" id='searchbtn' name="searchbtn"><span class="glyphicon glyphicon-search"></span>  Search</a> 
+                <a class="btn btn-primary" id='searchbtn' name="searchbtn"><span class="glyphicon glyphicon-search"></span>  Search</a>
+             
+                 <!--  <button class="btn btn-primary" type="submit" name=""><span class="glyphicon glyphicon-search"></span>  asd</button> -->
               </div>
-           </form>
-               
-             </div>
-             <div class="col-sm-3 text-right">  
-          <a id="button3id" name="button3id" class="btn btn-success" href="add-purchase" data-toggle="modal" data-target="#addModal"><span class="glyphicon glyphicon-plus"></span> Create New Transaction</a>     
-           </div><br>
+              <div class="form-group dropdown">
+                    <button class="btn btn-warning dropdown-toggle" id='export' name="export" data-toggle="dropdown">
+                    <span class="glyphicon glyphicon-export"></span> Export <span class="caret"></span></button>
+                      <ul class="dropdown-menu btn-primary">
+                        <li><button class="btn btn-block btn-default" type="submit" value="c" id="CSV" name="ept">CSV File</button></li>
+                        <li><button class="btn btn-block btn-default" type="submit" value="e" id="Excel" name="ept">Excel File</button></li>
+                      </ul>
+                  </div>
+          
+            
+
+             
+          <a id="button3id" name="button3id" class="btn btn-success col-sm-offset-1" href="add-purchase" data-toggle="modal" data-target="#addModal"><span class="glyphicon glyphicon-plus"></span> New Transaction</a>     
+           <br>
                <div class="col-sm-12"><br></div>
                    <div class="col-sm-12">
       
                            <div>
+
      
+
           <table id="example" class="table table-striped">
         <thead>
           <tr>
@@ -190,13 +211,13 @@
             <td>{{ $user1->actor }}</td>
             <td>{{ $user1->created_at }}</td> 
             <td>{{ $user1->updated_at }}</td>
-            <td>{{ $user1->remarks }}</td>
+            <td style="word-break: break-word;">{{ $user1->remarks }}</td>
             
             <td>
               
 
         <a class="btn btn-primary" href="edit/{{ $user1->id }}"" style="padding-left: 20px; padding-right: 20px"><span class="glyphicon glyphicon-pencil"></span> Edit</a>
-        <a class="btn btn-danger" href="delete/{{ $user1->id }}" onclick="return confirm('Do you really want to delete this record?\nID number: {{ $user1->id }}')"><span class="glyphicon glyphicon-remove"></span>
+        <a class="btn btn-danger" href="delete/{{ $user1->id }}" onclick="return confirm('Do you really want to delete this record?\nID number: {{ $user1->id }}')"><span class="glyphicon glyphicon-trash"></span>
         <!--   <script>
 function myFunction() {
     confirm("Do you really want to delete this record?");
@@ -208,64 +229,19 @@ function myFunction() {
 
         </td>
               </tr>
+              
               @empty
 @endforelse
-  
-
- <!--DELETE MODAL-->
-        <!--  <div class="modal fade" id="confirm-delete" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                
-                    <div class="modal-header  btn-danger">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h4 class="modal-title" id="myModalLabel">Confirm Delete</h4>
-                    </div>
-                
-                    <div class="modal-body">
-                        <p>You are about to delete this record, this procedure is irreversible.</p>
-                        <p>Do you want to proceed? </p>
-                        <! <p class="debug-url"></p> -->
-                   <!--  </div>
-                       
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                        <a class="btn btn-danger" href="delete">Delete</a>
-                    </div>
-                </div>
-            </div>
-        </div> --> 
-
-<!-- 
-   @if(session('user_id'))
-    <script>
-    $(function() {
-        $('.btn-danger').click(function (){
-            var url = ($(this).attr('id'));
-            $($(this).data('target')).show();
-        })
-    });
-    </script>
-@endif
- -->
-
-
-<!--       
-<script>
-            $('#confirm-delete').on('show.bs.modal', function(e) {
-                $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
-                
-                $('.debug-url').html('Delete URL: <strong>' + $(this).find('.btn-ok').attr('href') + '</strong>');
-            });
-        </script> -->
-
             </tbody>
           </table>
-
+        </form> 
+        </div>
+                
+        </div>
         </div>
 
-                  </div>
-          </div>
+        </div>
+        </div>
    
  
 </div>
@@ -330,7 +306,7 @@ function myFunction() {
           </form>
         </div>           
       </div>
-        </div>
+      </div>
 
         
       </div>
@@ -346,7 +322,7 @@ function myFunction() {
 </div>
 
 
- </div>
+</div>
     
 </div>
 <br><br><br>
@@ -404,20 +380,33 @@ $('#datetimepicker1').datetimepicker({
     <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js"></script>
 
 <script type="text/javascript">
-  $.fn.dataTableExt.afnFiltering.push(
+ $.fn.dataTable.ext.search.push(
     function( oSettings, aData, iDataIndex ) {
-        var iFini = document.getElementById('datetimepicker1').value;
-        var iFfin = document.getElementById('datetimepicker2').value;
+        var iFini = document.getElementById('datetimepicker1').value +  " 00:00:00";
+        var iFfin = document.getElementById('datetimepicker2').value +  " 23:59:59";
+        // iFini = iFini +  " 00:00:00";
+        // iFfin = iFfin +  " 23:59:59";
+
         var iStartDateCol = 5;
         var iEndDateCol = 5;
+        // var year1 = iFini.substring(6,10);
+
+        // if (iFini.substring(6,10) < iFfin.substring(6,10) )
+        // {
+          
+        // }
  
-        iFini=iFini.substring(6,10) + iFini.substring(3,5)+ iFini.substring(0,2);
-        iFfin=iFfin.substring(6,10) + iFfin.substring(3,5)+ iFfin.substring(0,2);
- 
-        var datofini=aData[iStartDateCol].substring(6,10) + aData[iStartDateCol].substring(3,5)+ aData[iStartDateCol].substring(0,2);
-        var datoffin=aData[iEndDateCol].substring(6,10) + aData[iEndDateCol].substring(3,5)+ aData[iEndDateCol].substring(0,2);
+        // iFini=iFini.substring(6,10) + iFini.substring(3,5)+ iFini.substring(0,2);
+        // iFfin=iFfin.substring(6,10) + iFfin.substring(3,5)+ iFfin.substring(0,2);
+
+        var datofini=aData[iStartDateCol];
+        var datoffin=aData[iEndDateCol];
  
         if ( iFini === "" && iFfin === "" )
+        {
+            return true;
+        }
+         else if ( iFini === " 00:00:00" && iFfin === " 23:59:59" )
         {
             return true;
         }
@@ -440,16 +429,32 @@ $('#datetimepicker1').datetimepicker({
 </script>
 <script type="text/javascript">
   $(document).ready(function() {
-      var table = $('#example').DataTable();
- 
-      // Add event listeners to the two range filtering inputs
-      // $('#datetimepicker1').onchange( function() { table.draw(); } );
-      // $('#datetimepicker2').onchange( function() { table.draw(); } );
+      var table = $('#example').DataTable({
+        "order": [[ 5, "desc" ]],
+        "dom":"<'row'<'col-sm-6'l><'col-sm-6'>f>" +
+"<'row'<'col-sm-12'tr>>" +
+"<'row'<'col-sm-5'i><'col-sm-7'p>>",
+// 'columnDefs'        : [         // see https://datatables.net/reference/option/columns.searchable
+//                 { 
+//                     'searchable'    : false, 
+//                     'targets'       : [5,6] 
+//                 },
+//             ]
+      });
+      $('div.dataTables_filter input').attr('name', 'SearchBar').attr('placeholder', 'Search...');
+        //  $('#datetimepicker1, #datetimepicker2').change(function () {
+        //     table.draw();
+        // });
       $('#searchbtn').click( function() { table.draw(); } );
+
+      $('#example').on('search.dt', function() {
+    var value = $('.dataTables_filter input').val();
+    console.log(value); // <-- the value
+});
+     
   } );
 </script>
- 
- 
+
 </body>
 </html>
 

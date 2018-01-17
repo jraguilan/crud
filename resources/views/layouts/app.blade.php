@@ -23,7 +23,7 @@
 
 <body>
     <div id="app" name="top">
-        <nav class="navbar navbar-default navbar-fixed-top">
+        <nav class="navbar navbar-default navbar-fixed-top" style="border-bottom:3px solid dodgerblue;padding-bottom:10px; border-top:2px; padding-top: 10px">
             <div class="container">
                 <div class="navbar-header">
 
@@ -83,9 +83,11 @@
                                         <form id="logout-form" action="{{ route('logout')}}" method="POST" style="display: none;">
                                             {{ csrf_field() }}
                                         </form> 
+                                        <a href="/home">Back</a>
                                     </li>
                                 </ul>
                             </li>
+                             <li></li>
                         @endif
                     </ul>
                 </div>

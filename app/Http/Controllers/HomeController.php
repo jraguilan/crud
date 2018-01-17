@@ -3,12 +3,18 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Input;
 use DB;
 use App\Http\Requests;
 use App\Http\Controllers;
 use Carbon\Carbon;
 use DateTime;
 use Session;
+//use App\Http\Controllers\Input;
+// use Input;
+
+
+
 
 class HomeController extends Controller
 {
@@ -35,7 +41,9 @@ class HomeController extends Controller
         //  if (Auth::guest()) { 
         //     return Redirect::guest('login');
         // } else { 
-        $users2 = DB::table('transaction')->get();
+        $users2 = DB::table('transaction')
+        ->orderby('created_at','desc')
+        ->get();
         
         return view('home',['users2'=>$users2]);
         
@@ -63,6 +71,10 @@ class HomeController extends Controller
 //GAWA BAGONG PAGE YUNG MAAYOS NA RETURN..
         //echo "Record inserted successfully.<br/>";
         //echo '<a href="/home">Click Here</a> to go back.';
+        session ( [ 
+            
+            'date1' => $request->get ( 'datetimepicker1' ) 
+        ] );
          Session::flash ( 'message', "Added successfully." );
         return redirect('home');
 }
@@ -183,5 +195,150 @@ private function super()
         //return view('home',['users2'=>$users2]);
         
     }
+    /*Export Data*/
+// public function export(Request $request){       
+//     $transact=DB::table('transaction')->get();
+//     $tot_record_found=0;
+//     if(count($transact)>0){
+//         $tot_record_found=1;
+         
+//         $CsvData=array('ID,Purchase,Amount,Operator,User,Remarks,Created At,Updated At');          
+//         foreach($transact as $value){              
+//             $CsvData[]=$value->id.','.$value->purchase.','.$value->amount.','.$value->operator.','.$value->actor.','.$value->remarks.','.$value->created_at.','.$value->updated_at;
+//         }
+         
+//         $filename=date('Y-m-d').".csv";
+//         $file_path=base_path().'/'.$filename;   
+//         $file = fopen($file_path,"w+");
+//         foreach ($CsvData as $exp_data){
+//           fputcsv($file,explode(',',$exp_data));
+//         }   
+//         fclose($file);          
+ 
+//         $headers = ['Content-Type' => 'application/csv'];
+//         return response()->download($file_path,$filename,$headers );
+//     }
+//     return view('download',['record_found' =>$tot_record_found]);    
+// }
+public function exportascsv(Request $request){  
+
+
+      $datefrom1 = $request->input('datetimepicker1');
+      $dateto1 = $request->input('datetimepicker2');
+      $datefrom = $datefrom1.  " 00:00:00";
+      $dateto = $dateto1.  " 23:59:59";
+      $searchbar = $request->input('SearchBar');
+
+
+       //    dd($searchbar);
+         // $request->session('datefrom',$datefrom);
+         //   $request->session('dateto',$dateto);
+       //  $users2 = DB::select('select * from transaction where created_at between ? and ?',[$datefrom,$dateto]);
+
+  
+    if (  $datefrom1 =="" &&  $dateto1 =="") {
+      if ($searchbar == "") {
+         $transact=DB::table('transaction')
+        ->orderby('created_at','desc')
+        ->get();
+
+      }
+      else {
+        $transact=DB::table('transaction')
+        ->Where(function ($query) {
+                $query->orwhere('purchase', 'ilike',  '%' . Input::get('SearchBar') . '%');  
+                $query->orwhere('operator', 'ilike',  '%' . Input::get('SearchBar') . '%');
+                $query->orwhere('actor', 'ilike',  '%' . Input::get('SearchBar') . '%');  
+                $query->orwhere('remarks', 'ilike',  '%' . Input::get('SearchBar') . '%');
+                $query->orwhere(DB::raw('cast(id as varchar)'), 'ilike',  '%' . Input::get('SearchBar') . '%');  
+                $query->orwhere(DB::raw('cast(amount as varchar)'), 'ilike',  '%' . Input::get('SearchBar') . '%');
+                $query->orwhere(DB::raw('cast(created_at as varchar)'), 'ilike',  '%' . Input::get('SearchBar') . '%');  
+                 $query->orwhere(DB::raw('cast(updated_at as varchar)'), 'ilike',  '%' . Input::get('SearchBar') . '%');          
+            })
+        ->orderby('created_at','desc')
+        ->get();
+      }
+    }
+    elseif (  $datefrom1 =="" || $dateto1 ==""){
+            Session::flash ( 'error', "Date ranges incomplete. Please try again." );
+            return redirect(\URL::previous());
+
+    }
+    elseif ( $datefrom1 <>"" && $dateto1 <>"" && $searchbar <>"") {
+        $transact=DB::table('transaction')
+        ->whereBetween('created_at', [$datefrom,$dateto])
+        ->Where(function ($query) {
+                $query->orwhere('purchase', 'ilike',  '%' . Input::get('SearchBar') . '%');  
+                $query->orwhere('operator', 'ilike',  '%' . Input::get('SearchBar') . '%');
+                $query->orwhere('actor', 'ilike',  '%' . Input::get('SearchBar') . '%');  
+                $query->orwhere('remarks', 'ilike',  '%' . Input::get('SearchBar') . '%');
+                $query->orwhere(DB::raw('cast(id as varchar)'), 'ilike',  '%' . Input::get('SearchBar') . '%');  
+                $query->orwhere(DB::raw('cast(amount as varchar)'), 'ilike',  '%' . Input::get('SearchBar') . '%');
+                 $query->orwhere(DB::raw('cast(created_at as varchar)'), 'ilike',  '%' . Input::get('SearchBar') . '%');  
+                 $query->orwhere(DB::raw('cast(updated_at as varchar)'), 'ilike',  '%' . Input::get('SearchBar') . '%');          
+            })
+        ->orderby('created_at','desc')
+        ->get();
+        }
+    
+    else {
+      if ($searchbar  <> "")
+        $transact=DB::table('transaction')
+        ->whereBetween('created_at', [$datefrom,$dateto])
+        ->orderby('created_at','desc')
+        ->get();
+        else {
+        $transact=DB::table('transaction')
+        ->whereBetween('created_at', [$datefrom,$dateto])
+        ->Where(function ($query) {
+                $query->orwhere('purchase', 'ilike',  '%' . Input::get('SearchBar') . '%');  
+                $query->orwhere('operator', 'ilike',  '%' . Input::get('SearchBar') . '%');
+                $query->orwhere('actor', 'ilike',  '%' . Input::get('SearchBar') . '%');  
+                $query->orwhere('remarks', 'ilike',  '%' . Input::get('SearchBar') . '%');
+                $query->orwhere(DB::raw('cast(id as varchar)'), 'ilike',  '%' . Input::get('SearchBar') . '%');  
+                $query->orwhere(DB::raw('cast(amount as varchar)'), 'ilike',  '%' . Input::get('SearchBar') . '%');
+                $query->orwhere(DB::raw('cast(created_at as varchar)'), 'ilike',  '%' . Input::get('SearchBar') . '%');     
+                 $query->orwhere(DB::raw('cast(updated_at as varchar)'), 'ilike',  '%' . Input::get('SearchBar') . '%');          
+            })
+        ->orderby('created_at','desc')
+        ->get();
+        }
+    }
+
+        $tot_record_found=0;
+        if(count($transact)>0){
+            $tot_record_found=1;
+            //First Methos          
+            $export_data="ID,Purchase,Amount,Operator,User,Created_At,Updated_At,Remarks\n";
+            foreach($transact as $value){
+                $export_data.=$value->id.','.$value->purchase.','.$value->amount.','.$value->operator.','.$value->actor.','.$value->created_at.','.$value->updated_at.','.$value->remarks."\n";
+            }
+
+            // dd(Input::get('ept')); 
+            //dd($export_data);
+
+
+            $export = $request->CSV;
+            if (Input::get('ept') == "c") {
+                 return response($export_data)
+                ->header('Content-Type','application/csv')               
+                ->header('Content-Disposition', 'attachment; filename="purchasing.csv"')
+                ->header('Pragma','no-cache')
+                ->header('Expires','0'); 
+               
+            }
+            else {
+                return response($export_data)
+                ->header('Content-Type','application/xls')               
+                ->header('Content-Disposition', 'attachment; filename="purchasing.xls"')
+                ->header('Pragma','no-cache')
+                ->header('Expires','0');      
+            }
+
+        }
+        Session::flash ( 'error', "No record found. Please try again." );
+        return redirect(\URL::previous());
+}
+
 
 }
