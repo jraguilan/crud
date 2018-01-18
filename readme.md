@@ -11,7 +11,7 @@ Prerequisites
 After cloning this repository, go to the root folder, run the following command/s,
     composer install
     composer update
-    composer require maatwebsite/excel
+    //composer require maatwebsite/excel
 
 Rename .env.example to .env and provide your database details there.
 Run

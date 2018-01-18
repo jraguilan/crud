@@ -168,9 +168,9 @@
               <div class="form-group dropdown">
                     <button class="btn btn-warning dropdown-toggle" id='export' name="export" data-toggle="dropdown">
                     <span class="glyphicon glyphicon-export"></span> Export <span class="caret"></span></button>
-                      <ul class="dropdown-menu btn-primary">
-                        <li><button class="btn btn-block btn-default" type="submit" value="c" id="CSV" name="ept">CSV File</button></li>
-                        <li><button class="btn btn-block btn-default" type="submit" value="e" id="Excel" name="ept">Excel File</button></li>
+                      <ul class="dropdown-menu">
+                        <li><button class="btn btn-block btn-primary" type="submit" value="c" id="CSV" name="ept">CSV File</button></li>
+                        <li><button class="btn btn-block btn-success" type="submit" value="e" id="Excel" name="ept">Excel File</button></li>
                       </ul>
                   </div>
           

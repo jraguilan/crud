@@ -77,10 +77,10 @@
                 </div>
             
 
-            <div class="content">
+            <div class="content"><hr>
                 <div class="title m-b-md">
                     PURCHASING
-                </div>
+                </div><hr>
 <!--
                 <div class="links">
                     <a href="https://laravel.com/docs">Documentation</a>

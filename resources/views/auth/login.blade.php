@@ -9,7 +9,7 @@
                 <div class="panel-heading">Login</div>
 
                 <div class="panel-body">
-                    <h2 align="center" style="color: dodgerblue">Welcome to Purchasing</h2>
+                    <h2 align="center" style="color: dodgerblue">Welcome to Purchasing</h2><hr>
                     <p align="center">Login with your <strong>Username</strong></p>
                                     
                             @if (Session::has('message'))

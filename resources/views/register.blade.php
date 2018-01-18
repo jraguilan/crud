@@ -8,6 +8,7 @@
                 <div class="panel-heading ">Register User</div>
 
                 <div class="panel-body">
+                     <h4 align="center" style="color: dodgerblue">Register User</h4><hr>
                     <form class="form-horizontal" method="POST" action="/registeruser">
                         {{ csrf_field() }}
 
